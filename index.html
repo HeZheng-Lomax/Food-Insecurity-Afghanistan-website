@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Food Insecurity in Afghanistan</title>
+<style>
+  :root{
+    --forest:#111111; --green:#111111; --sage:#8a8a8a; --mint:#f0f0f0;
+    --red:#111111; --bg:#f4f4f4; --card:#ffffff; --wheat:#d9a441;
+    --ink:#1a1a1a; --muted:#5a5a5a;
+    --tri:linear-gradient(90deg,#3a3a3a,#3a3a3a);
+    --r:18px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Times New Roman",Times,serif;background:var(--bg);color:var(--ink);font-size:19px;line-height:1.65}
+  h1,h2,h3,.brand,nav{font-family:Arial,Helvetica,sans-serif}
+  h1,h2,h3{line-height:1.2}
+
+  /* ---------- Header / nav ---------- */
+  header{position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;align-items:center;
+    padding:14px 28px;background:rgba(17,17,17,.97);backdrop-filter:blur(6px)}
+  header::after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:4px;background:var(--tri);z-index:0}
+  .brand{color:#fff;font-size:19px;font-weight:700;text-decoration:none;letter-spacing:.3px}
+  nav{display:flex;align-items:center;gap:10px}
+  nav > a, .dropdown > button{color:#e3eee2;text-decoration:none;font-family:inherit;font-size:16px;
+    background:none;border:none;cursor:pointer;padding:8px 16px;border-radius:999px;transition:background .2s}
+  nav > a:hover, .dropdown > button:hover{background:rgba(255,255,255,.12);color:#fff}
+  nav a.active, .dropdown.active > button{background:rgba(255,255,255,.2);color:#fff;font-weight:700}
+
+  .dropdown{position:relative}
+  .dropdown > button .caret{display:inline-block;margin-left:6px;font-size:11px;transition:transform .2s}
+  .menu{position:absolute;right:0;top:100%;min-width:220px;padding:8px;margin-top:10px;
+    background:#fff;border-radius:16px;box-shadow:0 14px 34px rgba(20,40,25,.2);
+    opacity:0;visibility:hidden;transform:translateY(-6px);transition:all .18s ease}
+  .menu::before{content:"";position:absolute;left:0;right:0;top:-14px;height:14px}
+  .dropdown:hover .menu, .dropdown.open .menu{opacity:1;visibility:visible;transform:translateY(0)}
+  .dropdown:hover .caret, .dropdown.open .caret{transform:rotate(180deg)}
+  .menu a{display:block;padding:10px 16px;color:var(--ink);text-decoration:none;font-size:16px;border-radius:10px}
+  .menu a:hover{background:var(--mint);color:var(--red)}
+  .menu a.active{color:var(--green);font-weight:700}
+
+  /* ---------- Banner ---------- */
+  .banner{position:relative;overflow:hidden;color:#fff;text-align:center;
+    margin:18px 18px 0;border-radius:28px;padding:96px 24px 104px;
+    background:linear-gradient(115deg,#0d0d0d 0%,#1f1f1f 45%,#3a3a3a 75%,#555 100%)}
+  .banner::after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.18);pointer-events:none}
+  .banner > *{z-index:1}
+  .banner svg.hills{position:absolute;left:0;right:0;bottom:0;width:100%;height:46%;pointer-events:none}
+  .banner .glow{position:absolute;width:420px;height:420px;border-radius:50%;right:-80px;top:-140px;
+    background:radial-gradient(circle,rgba(255,255,255,.18),rgba(255,255,255,0) 70%)}
+  .banner .tag{position:relative;display:inline-block;font-family:Arial,sans-serif;font-size:13px;letter-spacing:2px;
+    text-transform:uppercase;padding:6px 16px;border-radius:999px;background:rgba(255,255,255,.15);margin-bottom:20px}
+  .banner h1{position:relative;font-size:clamp(36px,6vw,66px);font-weight:700;max-width:900px;margin:0 auto}
+  .banner p{position:relative;margin:16px auto 0;max-width:640px;font-size:21px;opacity:.92}
+  .banner.small{padding:64px 24px 70px}
+  .banner.small h1{font-size:clamp(30px,4.5vw,48px)}
+  .banner .photo-hint{position:absolute;top:16px;right:20px;z-index:2;font:13px Arial,sans-serif;padding:5px 12px;
+    border:1.5px dashed rgba(255,255,255,.6);border-radius:999px;color:rgba(255,255,255,.85)}
+  /* to add a banner photo: <div class="banner small has-photo" style="background-image:url('img/your-photo.jpg')"> */
+  .menu{min-width:330px;max-width:calc(100vw - 24px);z-index:10}
+  .menu a{display:flex;align-items:baseline;white-space:nowrap}
+  .menu a i{flex:none;width:28px}
+  .menu-sep{height:1px;background:#e2e2e2;margin:6px 10px}
+
+  /* ---------- Layout ---------- */
+  main{max-width:1160px;margin:0 auto;padding:48px 24px 70px}
+  .page{display:none}
+  .page.show{display:block;animation:fade .35s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  .intro{display:grid;grid-template-columns:1.3fr 1fr;gap:36px;align-items:center;margin-bottom:52px}
+  .intro h2{font-size:32px;margin-bottom:16px;color:var(--forest)}
+  .btn{display:inline-block;margin-top:22px;padding:10px 28px;border-radius:999px;background:var(--green);
+    color:#fff;text-decoration:none;font-family:Arial,sans-serif;font-size:16px;transition:.2s}
+  .btn:hover{background:var(--forest);transform:translateY(-1px)}
+
+  /* image placeholders — replace with <img class="photo" src="..."> */
+  .ph{background:repeating-linear-gradient(45deg,#e2e2e2 0 14px,#ececec 14px 28px);border-radius:var(--r);
+    display:flex;align-items:center;justify-content:center;color:#777;font-style:italic;min-height:270px;text-align:center;padding:10px}
+  img.photo{width:100%;height:100%;object-fit:cover;display:block;border-radius:var(--r)}
+
+  .stats{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-bottom:14px}
+  .stat{background:var(--card);border-radius:var(--r);box-shadow:0 4px 18px rgba(0,0,0,.07);
+    display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center;padding:26px}
+  .pict{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;width:290px}
+  .pict svg{width:100%;height:auto}
+  .stat p{color:var(--forest);text-align:center;font-size:19px;line-height:1.35}
+  .stat p b{display:block;font-family:Arial,sans-serif;font-size:46px;color:var(--red)}
+  .source{font-size:15px;color:var(--muted);text-align:right;margin-bottom:48px}
+  .source a{color:var(--green)}
+
+  .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+  .gallery .ph{min-height:220px}
+
+  /* content pages */
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:start;margin-bottom:44px}
+  .section-title{font-size:28px;margin-bottom:14px;color:var(--forest)}
+  .content p{margin-bottom:14px}
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin:10px 0 44px}
+  .card{background:var(--card);padding:26px;border-radius:var(--r);box-shadow:0 4px 18px rgba(0,0,0,.07);border-top:5px solid var(--sage)}
+  .card h3{font-size:20px;margin-bottom:8px;color:var(--forest)}
+  .callout{background:var(--forest);border-left:8px solid #9a9a9a;color:#fff;padding:30px 34px;border-radius:var(--r);margin:10px 0 44px;font-size:21px}
+  .callout b{font-family:Arial,sans-serif}
+  ul.list{padding-left:22px} ul.list li{margin-bottom:8px}
+  .refs li{margin-bottom:12px;padding-left:4px}
+  a{color:var(--green)}
+
+  footer{position:relative;overflow:hidden;background:var(--forest);color:#e6e6e6;padding:26px 30px 22px;font-size:16px;
+    margin:0 18px 18px;border-radius:24px}
+  footer::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;background:var(--tri)}
+  .foot-inner{max-width:1160px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+  .foot-link{font-family:Arial,sans-serif;font-size:15px;color:#fff;text-decoration:none;padding:8px 18px;
+    border-radius:999px;background:rgba(255,255,255,.14);transition:background .2s}
+  .foot-link:hover,.foot-link.active{background:rgba(255,255,255,.26)}
+
+  /* team page */
+  .team{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+  .member{background:var(--card);border-radius:var(--r);box-shadow:0 4px 18px rgba(0,0,0,.07);padding:30px 22px;text-align:center}
+  .avatar{width:110px;height:110px;border-radius:50%;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,var(--sage),var(--green));color:#fff;font:700 38px Arial,sans-serif;overflow:hidden}
+  .avatar img{width:100%;height:100%;object-fit:cover}
+  .member h3{font-size:19px;color:var(--forest)}
+  .member span{display:block;font-family:Arial,sans-serif;font-size:14px;color:var(--sage);margin:4px 0 10px}
+  .member p{font-size:17px;color:var(--muted)}
+  @media (max-width:980px){.team{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:560px){.team{grid-template-columns:1fr} footer::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;background:var(--tri)}
+  .foot-inner{justify-content:center;text-align:center}}
+
+  @media (max-width:820px){
+    header{padding:12px 14px} .brand{font-size:16px}
+    nav > a, .dropdown > button{padding:7px 11px}
+    .banner{margin:12px 12px 0;padding:70px 18px 80px}
+    .intro,.stats,.two{grid-template-columns:1fr}
+    .gallery,.cards{grid-template-columns:1fr}
+    .stat{grid-template-columns:1fr;justify-items:center}
+    .pict{width:240px}
+    footer{margin:0 12px 12px}
+  }
+  /* ---------- photo banners ---------- */
+  .banner.has-photo{background-size:cover;background-position:center}
+  .banner.has-photo::after{background:linear-gradient(180deg,rgba(0,0,0,.35),rgba(0,0,0,.55))}
+  .banner.has-photo .photo-hint,.banner.has-photo svg.hills,.banner.has-photo .glow{display:none}
+  .banner.tall{padding:150px 24px 160px}
+
+  /* ---------- figures & infographics ---------- */
+  figure.fig{background:var(--card);border-radius:var(--r);box-shadow:0 4px 18px rgba(0,0,0,.07);overflow:hidden}
+  figure.fig img{display:block;width:100%;height:auto}
+  figure.fig figcaption{padding:12px 18px 14px;font-size:16px;color:var(--muted);line-height:1.45}
+  figure.fig figcaption b{color:var(--ink)}
+  .fig-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:26px;margin-bottom:44px}
+  .fig-grid.three{grid-template-columns:repeat(3,1fr)}
+  .fig-wide{max-width:900px;margin:0 auto 44px}
+  .photo-card{border-radius:var(--r);overflow:hidden;box-shadow:0 4px 18px rgba(0,0,0,.07);background:var(--card)}
+  .photo-card img{display:block;width:100%;aspect-ratio:3/2;object-fit:cover}
+  .photo-card .pc-body{padding:20px 22px 24px}
+  .photo-card h3{font-size:20px;color:var(--forest);margin-bottom:8px}
+  .lead{max-width:820px;margin:0 auto 40px;text-align:center;font-size:21px}
+  .title-icon{display:flex;align-items:center;gap:18px;margin-bottom:14px}
+  .title-icon img{width:78px;height:78px;padding:10px;border-radius:50%;background:#fff;box-shadow:0 3px 12px rgba(0,0,0,.08);flex:none}
+  .title-icon h2{margin:0}
+
+  /* stat strip */
+  .stat-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:18px;margin-bottom:52px}
+  .tile{background:var(--card);border-radius:var(--r);padding:22px 16px;text-align:center;box-shadow:0 4px 18px rgba(0,0,0,.07);border-bottom:5px solid var(--green)}
+  .tile:nth-child(odd){border-bottom-color:#9a9a9a}
+  .tile b{display:block;font:700 34px Arial,sans-serif;color:var(--forest)}
+  .tile span{display:block;font-size:16px;color:var(--muted);line-height:1.35;margin-top:6px}
+  .problem-statement{font-size:22px;text-align:center}
+  .refs{font-size:16px} .refs li{word-break:break-word}
+
+  @media (max-width:980px){.stat-strip{grid-template-columns:repeat(3,1fr)}}
+  @media (max-width:820px){.fig-grid,.fig-grid.three{grid-template-columns:1fr}.stat-strip{grid-template-columns:repeat(2,1fr)}.banner.tall{padding:100px 18px 110px}}
+  .overview{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+  .ov{display:block;background:var(--card);border-radius:var(--r);padding:24px 22px;text-decoration:none;color:var(--ink);
+    box-shadow:0 4px 18px rgba(0,0,0,.07);border-top:5px solid var(--green);transition:transform .2s,box-shadow .2s}
+  .ov:nth-child(even){border-top-color:#9a9a9a}
+  .ov:hover{transform:translateY(-4px);box-shadow:0 10px 26px rgba(0,0,0,.12)}
+  .ov span{font:700 15px Arial,sans-serif;color:var(--red)}
+  .ov h3{font-size:19px;margin:8px 0 6px;color:var(--forest)}
+  .ov p{font-size:16px;color:var(--muted)}
+  .menu a i{font:700 12px Arial,sans-serif;font-style:normal;color:var(--red);margin-right:2px}
+  @media (max-width:980px){.overview{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:560px){.overview{grid-template-columns:1fr}}
+  /* ---------- unified infographic cards ---------- */
+  .ig{line-height:1.4;background:#fff;border-radius:var(--r);box-shadow:0 4px 18px rgba(0,0,0,.07);overflow:hidden;display:flex;flex-direction:column;font-family:Arial,Helvetica,sans-serif}
+  .ig-head{background:#111;color:#fff;font-weight:700;font-size:17px;padding:14px 20px;letter-spacing:.2px}
+  .ig-body{padding:20px;flex:1}
+  .ig-sub{font-size:13px;color:#777;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px}
+  .ig-src{font-size:12.5px;color:#777;padding:0 20px 14px}
+  .ig-cap{font-family:"Times New Roman",Times,serif;font-size:16px;color:var(--muted);padding:12px 20px 16px;border-top:1px solid #eee;line-height:1.45}
+  .ig-ic{display:inline-flex;width:46px;height:46px;border-radius:50%;background:#f0f0f0;color:#111;align-items:center;justify-content:center;flex:none}
+  .ig .ig-ic{display:inline-flex;align-items:center;justify-content:center}
+  .ig-ic svg{width:26px;height:26px}
+  .ig-nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px}
+  .ig-num{background:#f6f6f6;border-radius:14px;padding:18px}
+  .ig-num b{display:block;font-size:34px;line-height:1.1;margin:12px 0 6px;color:#111}
+  .ig-num span{display:block;font-size:14px;color:#555;line-height:1.4}
+  .ig-bars{display:flex;flex-direction:column;gap:18px}
+  .ig-bar-top{display:flex;justify-content:space-between;gap:12px;font-size:14.5px;color:#444;margin-bottom:7px}
+  .ig-bar-top b{font-size:22px;color:#111}
+  .ig-track{height:14px;background:#ececec;border-radius:999px;overflow:hidden}
+  .ig-track i{display:block;height:100%;background:#111;border-radius:999px}
+  .ig-factors{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px}
+  .ig-factors.three{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+  .ig-factor{background:#f6f6f6;border-radius:14px;padding:16px 14px;text-align:center}
+  .ig-factor .ig-ic{background:#111;color:#fff;margin-bottom:10px}
+  .ig-factor b{display:block;font-size:14.5px;margin-bottom:5px}
+  .ig-factor span{display:block;font-size:12.5px;color:#555;line-height:1.4}
+  .ig-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+  .ig-tags span{background:#111;color:#fff;font-size:13px;padding:6px 14px;border-radius:999px}
+  .ig-note{margin-top:14px;font-size:14px;color:#444}
+  .ig-note b{font-size:20px;color:#111;margin-right:4px}
+  .ig-pict-wrap{display:flex;align-items:center;gap:18px;flex-wrap:wrap;justify-content:center}
+  .ig-pict-wrap .pict{width:200px}
+  .ig-pict-wrap .pict.five{grid-template-columns:repeat(5,1fr);width:210px;gap:6px}
+  .ig-pict-txt{flex:1;min-width:120px;text-align:center}
+  .ig-pict-txt b{display:block;font-size:40px;color:#111}
+  .ig-pict-txt span{display:block;font-size:14px;color:#555;line-height:1.4}
+  .refs-page li{margin-bottom:14px;padding-left:6px;font-size:17px}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="brand" href="#home">HS325 Deliverable</a>
+  <nav>
+    <a href="#home" data-link="home">Home</a>
+    <div class="dropdown" id="dd">
+      <button type="button" aria-haspopup="true" aria-expanded="false">Explore<span class="caret">▾</span></button>
+      <div class="menu" role="menu">
+        <a href="#problem" data-link="problem"><i>01</i>Food Insecurity in Afghanistan</a>
+        <a href="#beyond-headlines" data-link="beyond-headlines"><i>02</i>Afghanistan Beyond the Headlines</a>
+        <a href="#infectious-disease" data-link="infectious-disease"><i>03</i>Infectious Disease</a>
+        <a href="#ncds" data-link="ncds"><i>04</i>Non-communicable Diseases</a>
+        <a href="#maternal-child" data-link="maternal-child"><i>05</i>Maternal and Child Health</a>
+        <a href="#environment" data-link="environment"><i>06</i>Environmental Health</a>
+        <a href="#disaster-violence" data-link="disaster-violence"><i>07</i>Disaster, Injury, and Violence</a>
+        <a href="#take-action" data-link="take-action"><i>08</i>What You Can Do to Help</a>
+        <div class="menu-sep"></div>
+        <a href="#references" data-link="references">References</a>
+        <a href="#team" data-link="team">Meet the Team</a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!-- reusable hills decoration for banners -->
+<template id="hills">
+  <svg class="hills" viewBox="0 0 1440 300" preserveAspectRatio="none">
+    <path d="M0 190 C240 120 420 230 720 170 C1000 115 1200 210 1440 150 L1440 300 L0 300Z" fill="rgba(255,255,255,.06)"/>
+    <path d="M0 240 C300 180 520 280 860 225 C1120 185 1300 250 1440 220 L1440 300 L0 300Z" fill="rgba(0,0,0,.12)"/>
+  </svg>
+</template>
+
+<!-- ===================== HOME (landing page) ===================== -->
+<section class="page" id="page-home">
+  <div class="banner tall has-photo" style="background-image:url('img/banner-home.jpg')">
+    <span class="tag">HS325 Global Health · Country Health Profile</span>
+    <h1>Food Insecurity in Afghanistan</h1>
+  </div>
+  <main>
+    <p class="lead">Home to approximately 45 million people, Afghanistan is a country rich in culture and history. However, years of conflict, economic instability, and environmental challenges have left many families struggling to access enough nutritious food.</p>
+    <div class="overview">
+      <a class="ov" href="#problem"><span>01</span><h3>Food Insecurity in Afghanistan</h3><p>Problem</p></a>
+      <a class="ov" href="#beyond-headlines"><span>02</span><h3>Afghanistan Beyond the Headlines</h3><p>Population, sociopolitical background, physical and human geography</p></a>
+      <a class="ov" href="#infectious-disease"><span>03</span><h3>Infectious Disease</h3></a>
+      <a class="ov" href="#ncds"><span>04</span><h3>Non-communicable Diseases</h3></a>
+      <a class="ov" href="#maternal-child"><span>05</span><h3>Maternal and Child Health</h3></a>
+      <a class="ov" href="#environment"><span>06</span><h3>Environmental Health</h3></a>
+      <a class="ov" href="#disaster-violence"><span>07</span><h3>Disaster, Injury, and Violence</h3></a>
+      <a class="ov" href="#take-action"><span>08</span><h3>What You Can Do to Help</h3></a>
+    </div>
+  </main>
+</section>
+
+<!-- ===================== 1. PROBLEM (Arcadia) ===================== -->
+<section class="page" id="page-problem">
+  <div class="banner small"><span class="photo-hint">Banner photo here</span><span class="tag">Section 01 · Problem</span><h1>Food Insecurity in Afghanistan</h1></div>
+  <main>
+    <div class="intro">
+      <div>
+        <div class="title-icon"><img src="img/icon-hunger.png" alt=""><h2>The Problem</h2></div>
+        <p>Rising food prices and drought make it harder for families in Afghanistan to afford and grow nutritious food. An estimated 3.7 million children are affected by wasting, a form of malnutrition that causes children to weigh too little for their height. More than 1 million children face life-threatening acute malnutrition (UNICEF, 2026).</p>
+        <a class="btn" href="#beyond-headlines">Next: Beyond the Headlines →</a>
+      </div>
+      <div class="ig"><div class="ig-head">Child malnutrition</div><div class="ig-body"><div class="ig-nums"><div class="ig-num"><span class="ig-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11h18a9 9 0 0 1-18 0zM8 7c0-1.5 1.5-1.5 1.5-3M13 7c0-1.5 1.5-1.5 1.5-3"/></svg></span><b>3.7 million</b><span>children affected by wasting</span></div><div class="ig-num"><span class="ig-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M12 8v8M8 12h8"/></svg></span><b>Over 1 million</b><span>children facing life-threatening acute malnutrition</span></div></div></div><div class="ig-src">Source: UNICEF (2026)</div></div>
+    </div>
+
+    <div class="fig-grid" style="margin-bottom:14px">
+      <div class="ig"><div class="ig-head">Acute food insecurity</div><div class="ig-body"><div class="ig-pict-wrap"><div class="pict" data-pct="38" data-total="100"></div><div class="ig-pict-txt"><b>19.2M</b><span>People in Afghanistan are projected to face acute food insecurity during winter (2026-2027)</span></div></div></div></div>
+      <div class="ig"><div class="ig-head">Rural households</div><div class="ig-body"><div class="ig-pict-wrap"><div class="pict" data-pct="45" data-total="100"></div><div class="ig-pict-txt"><b>45%</b><span>reported that someone in their household had gone an entire day and night without eating during the previous month</span></div></div></div></div>
+    </div>
+    <p class="source">Sources: IPC analysis via <a href="https://www.wfp.org/news/food-insecurity-and-child-malnutrition-worsen-afghanistan-despite-strong-agricultural-season" target="_blank" rel="noopener">WFP (2026)</a>; Najam et al. (2023), 6,019 rural households</p>
+
+    <div class="callout problem-statement"><b>Problem statement:</b> Food insecurity in Afghanistan limits families' reliable access to nutritious food, placing women and children at particular risk of malnutrition and related illness.</div>
+
+    <h2 class="section-title" style="text-align:center">Causal Web</h2>
+    <figure class="fig fig-wide"><img src="img/causal-web.jpg" alt="Causal web of food insecurity in Afghanistan"></figure>
+  </main>
+</section>
+
+<!-- ===================== 2. BEYOND THE HEADLINES (Amani) ===================== -->
+<section class="page" id="page-beyond-headlines">
+  <div class="banner small has-photo" style="background-image:url('img/banner-beyond.jpg')"><span class="tag">Section 02</span><h1>Afghanistan Beyond the Headlines</h1></div>
+  <main>
+    <p class="lead">Home to approximately 45 million people, Afghanistan is a country rich in culture and history. However, years of conflict, economic instability, and environmental challenges have left many families struggling to access enough nutritious food.</p>
+
+    <div class="stat-strip">
+      <div class="tile"><b>45M</b><span>People in Afghanistan (2026 projection)</span></div>
+      <div class="tile"><b>71%</b><span>Living in Rural communities (2019)</span></div>
+      <div class="tile"><b>37%</b><span>Adult literacy rate (2021)</span></div>
+      <div class="tile"><b>14.4M</b><span>Needing humanitarian health assistance (2026)</span></div>
+      <div class="tile"><b>19.2M</b><span>People in Afghanistan are projected to face acute food insecurity during winter (2026-2027)</span></div>
+    </div>
+
+    <div class="two">
+      <div class="content">
+        <h2 class="section-title">People and Culture</h2>
+        <p>Afghanistan is home to diverse ethnic communities, including Pashtuns, Tajiks, Uzbeks, and Hazaras. Dari and Pashto are the official languages, and Islam is the predominant religion. Many families live in rural communities and depend on agriculture for their livelihoods, making them particularly vulnerable to drought and food shortages.</p>
+      </div>
+      <figure class="fig"><img src="img/pyramid.jpg" alt="Population pyramid of Afghanistan, 2026"><figcaption><b>Population by age and sex, 2026.</b> The broad base reflects a very young population. Source: PopulationPyramids (UN World Population Prospects 2024).</figcaption></figure>
+    </div>
+
+    <h2 class="section-title" style="text-align:center">Challenges Behind the Numbers</h2>
+    <div class="fig-grid three">
+      <div class="photo-card"><img src="img/women.jpg" alt="Two women and a girl walking on a rural road"><div class="pc-body"><h3>Restrictions on Women</h3><p>Since the Taliban returned to power in 2021, restrictions on women's education and employment have limited opportunities for financial independence, making it harder for some households to meet their basic needs.</p></div></div>
+      <div class="photo-card"><img src="img/displacement.jpg" alt="A mother holding a baby with children in a tent"><div class="pc-body"><h3>Conflict and Displacement</h3><p>Decades of conflict and continued political instability have disrupted trade and access to essential resources. Displacement places additional pressure on already vulnerable communities.</p></div></div>
+      <div class="photo-card"><img src="img/economy.jpg" alt="Bread sellers at a market at night"><div class="pc-body"><h3>Economic Hardship</h3><p>Afghanistan is classified as a low-income country. Limited employment opportunities, rising food prices, and declining foreign aid make it difficult for families to afford nutritious food.</p></div></div>
+    </div>
+
+    <div class="two" style="margin-top:20px">
+      <div class="content">
+        <h2 class="section-title">How Geography Contributes to Hunger</h2>
+        <p>Afghanistan's mountainous landscape and dry climate creates significant challenges for agriculture and food distribution. Frequent droughts and water shortages reduce crop production, while remote villages often face difficulties accessing markets and essential supplies. For rural families who rely on farming, these environmental challenges can threaten both their income and access to food.</p>
+      </div>
+      <figure class="fig"><img src="img/map.jpg" alt="Map of Afghanistan showing UNFPA services"><figcaption><b>Map of Afghanistan.</b> Source: United Nations Population Fund (UNFPA, 2021).</figcaption></figure>
+    </div>
+    <div class="fig-grid">
+      <div class="photo-card"><img src="img/geo-farmer.jpg" alt="Farmers digging dry soil"></div>
+      <div class="photo-card"><img src="img/geo-drought.jpg" alt="A farmer standing on cracked, dry land"></div>
+    </div>
+
+    <div class="callout"><b>Food Insecurity Is More Than a Lack of Food</b><br>Food insecurity in Afghanistan is not simply a matter of food availability. For millions of families, poverty, political instability, and environmental challenges make it difficult to consistently access nutritious meals. These barriers create a cycle in which limited resources and opportunities threaten both health and well being. Understanding the causes of hunger is the first step toward creating lasting change.</div>
+  </main>
+</section>
+
+<!-- ===================== 3. INFECTIOUS DISEASE (Lomax) ===================== -->
+<section class="page" id="page-infectious-disease">
+  <div class="banner small"><span class="photo-hint">Banner photo here</span><span class="tag">Section 03</span><h1>Infectious Disease</h1></div>
+  <main>
+    <div class="two">
+      <div class="content">
+        <p>Infectious diseases remain a major cause of illness and death in Afghanistan, especially among children and women with limited access to healthcare. Between December 29, 2024, and July 12, 2025, the WHO reported 840,374 cases of pneumonia and 1,871 deaths.</p>
+        <p>Acute watery diarrhea with dehydration caused 78,972 cases and 35 deaths in the same period.</p>
+      </div>
+      <div class="ig"><div class="ig-head">Two infections, one six-month window</div><div class="ig-body"><p class="ig-sub">Afghanistan, Dec 29, 2024 – Jul 12, 2025</p><div class="ig-nums"><div class="ig-num"><span class="ig-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v8M12 11c-1 1-2 1-3 0M12 11c1 1 2 1 3 0M8.5 7C5 7 3 13 3 17c0 2 1.5 3 3 3 2.5 0 3.5-1.5 3.5-4V8.5M15.5 7C19 7 21 13 21 17c0 2-1.5 3-3 3-2.5 0-3.5-1.5-3.5-4V8.5"/></svg></span><b>840,374</b><span>cases of pneumonia (acute respiratory infection) · 1,871 deaths</span></div><div class="ig-num"><span class="ig-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6.5 7.2 6.5 11.5a6.5 6.5 0 0 1-13 0C5.5 10.2 12 3 12 3z"/></svg></span><b>78,972</b><span>cases of acute watery diarrhea with dehydration · 35 deaths</span></div></div></div><div class="ig-src">Source: World Health Organization (2025b)</div></div>
+    </div>
+    <div class="two">
+      <div class="ig"><div class="ig-head">Why infections keep spreading</div><div class="ig-body"><div class="ig-factors"><div class="ig-factor"><span class="ig-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2l4 4M20 4l-3 3M15 5l4 4M17 7L8 16l-3 1 1-3 9-9M10 10l2 2M7 13l2 2M5 19l-3 3"/></svg></span><b>Low vaccination</b><span>Too few people are protected against disease</span></div><div class="ig-factor"><span class="ig-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h14l-4-4M20 16H6l4 4"/></svg></span><b>Displacement</b><span>Moving populations are harder to reach and protect</span></div><div class="ig-factor"><span class="ig-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M12 8v8M8 12h8"/></svg></span><b>Unequal access</b><span>Not everyone can reach health services</span></div><div class="ig-factor"><span class="ig-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11h18a9 9 0 0 1-18 0zM8 7c0-1.5 1.5-1.5 1.5-3M13 7c0-1.5 1.5-1.5 1.5-3"/></svg></span><b>Malnutrition</b><span>Raises infection risk, especially measles in young children</span></div><div class="ig-factor"><span class="ig-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 6.5v11M15 9.3c0-1.2-1.3-1.8-3-1.8s-3 .7-3 1.9 1.3 1.7 3 2.1 3 .9 3 2.2-1.3 1.9-3 1.9-3-.7-3-1.9"/></svg></span><b>Funding shortages</b><span>Clinics closed and water systems left unrepaired</span></div></div><div class="ig-tags"><span>Tuberculosis</span><span>Measles</span><span>Malaria</span><span>Polio</span></div><p class="ig-note"><b>1 of 2</b> countries where wild polio is still endemic</p></div><div class="ig-src">Source: World Health Organization (2025b)</div></div>
+      <div class="content">
+        <p>Tuberculosis, measles, malaria, and polio are also major threats, and Afghanistan is one of only two countries where wild poliovirus is still endemic. Low vaccination coverage, displacement, unequal access to health services, and malnutrition make these diseases hard to control. Funding shortages have also closed health facilities and left water systems unrepaired.</p>
+      </div>
+    </div>
+  </main>
+</section>
+
+<!-- ===================== 4. NON-COMMUNICABLE DISEASES (Brenda) ===================== -->
+<section class="page" id="page-ncds">
+  <div class="banner small"><span class="photo-hint">Banner photo here</span><span class="tag">Section 04</span><h1>Non-communicable Diseases</h1></div>
+  <main>
+    <p class="lead">Many non-communicable diseases can root from poor food quality, or lack of access to food. In a study, 42.8% of the participants were overweight or obese, 82.6% of the participants had inadequate intake of vegetables and fruits, etc. Subsequently, 18% of the participants had elevated cholesterol, 25% had high blood pressure, etc. Among these are pre-sets to other communicable and non-communicable diseases.</p>
+    <div class="fig-grid three">
+      <div class="ig"><div class="ig-head">Non-communicable diseases</div><div class="ig-body"><div class="ig-pict-wrap"><div class="pict" data-pct="43" data-total="100"></div><div class="ig-pict-txt"><b>43%</b><span>of deaths nationwide are from heart disease, diabetes, cancer, and chronic lung diseases</span></div></div></div><div class="ig-cap">Heart disease, diabetes, cancer, and chronic lung diseases account for approximately 43% of deaths nationwide in Afghanistan.</div></div>
+      <div class="ig"><div class="ig-head">Cardiovascular disease</div><div class="ig-body"><div class="ig-nums"><div class="ig-num"><span class="ig-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5s-8-5-8-11a4.5 4.5 0 0 1 8-2.8 4.5 4.5 0 0 1 8 2.8c0 6-8 11-8 11z"/><path d="M5 12h4l1.5-3 2 6 1.5-3H19"/></svg></span><b>40,000</b><span>deaths annually from cardiovascular disease</span></div></div></div><div class="ig-cap">Cardiovascular disease alone causes more than 40,000 deaths annually.</div></div>
+      <div class="ig"><div class="ig-head">Mental health</div><div class="ig-body"><div class="ig-pict-wrap"><div class="pict five" data-pct="1" data-total="5"></div><div class="ig-pict-txt"><b>1 in 5</b><span>people suffering from mental illness in Afghanistan</span></div></div></div><div class="ig-cap">Mental health conditions add to this burden, affecting an estimated one in five Afghans.</div></div>
+    </div>
+  </main>
+</section>
+
+<!-- ===================== 5. MATERNAL AND CHILD HEALTH (Brenda) ===================== -->
+<section class="page" id="page-maternal-child">
+  <div class="banner small"><span class="photo-hint">Banner photo here</span><span class="tag">Section 05</span><h1>Maternal and Child Health</h1></div>
+  <main>
+    <p class="lead">Child malnutrition is a major issue in Afghanistan, with an estimated 3.7 million children suffering from wasting and over 1 million suffering from acute, life-threatening malnutrition</p>
+    <div class="fig-grid">
+      <div class="ig"><div class="ig-head">Child malnutrition</div><div class="ig-body"><div class="ig-nums"><div class="ig-num"><span class="ig-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11h18a9 9 0 0 1-18 0zM8 7c0-1.5 1.5-1.5 1.5-3M13 7c0-1.5 1.5-1.5 1.5-3"/></svg></span><b>3.7 million</b><span>children affected by wasting</span></div><div class="ig-num"><span class="ig-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M12 8v8M8 12h8"/></svg></span><b>Over 1 million</b><span>children facing life-threatening acute malnutrition</span></div></div></div><div class="ig-src">Source: UNICEF (2026)</div></div>
+      <div class="ig"><div class="ig-head">Maternal mortality</div><div class="ig-body"><p class="ig-sub">Deaths per 100,000 live births</p><div class="ig-bars"><div class="ig-bar"><div class="ig-bar-top"><span>Afghanistan</span><b>521</b></div><div class="ig-track"><i style="width:100.0%"></i></div></div><div class="ig-bar"><div class="ig-bar-top"><span>United States</span><b>18</b></div><div class="ig-track"><i style="width:3.5%"></i></div></div></div></div><div class="ig-cap"><a href="https://www.cdc.gov/nchs/nvss/vsrr/provisional-maternal-deaths-rates.htm" target="_blank" rel="noopener">https://www.cdc.gov/nchs/nvss/vsrr/provisional-maternal-deaths-rates.htm</a></div></div>
+    </div>
+  </main>
+</section>
+
+<!-- ===================== 6. ENVIRONMENTAL HEALTH (Brenda) ===================== -->
+<section class="page" id="page-environment">
+  <div class="banner small"><span class="photo-hint">Banner photo here</span><span class="tag">Section 06</span><h1>Environmental Health</h1></div>
+  <main>
+    <div class="two">
+      <div class="content">
+        <p>Environmental risks, such as droughts, lack of clean water, and high air pollution can lead to many unfavorable conditions that make it hard for people to grow produce, have access to water, and raise livestock. All of these could lead to other diseases, whether communicable or non-communicable. Without clean water and environment, people aren't able to grow crops in order to produce food for themselves and their families. Additionally, the pollution in the air would decrease the nutritional content of the fresh fruit and vegetables. Humans, and livestock, need a sufficient amount of water to survive.</p>
+      </div>
+      <div class="ig"><div class="ig-head">Environmental risks</div><div class="ig-body"><div class="ig-pict-wrap"><div class="pict" data-pct="26" data-total="100"></div><div class="ig-pict-txt"><b>26%</b><span>of all deaths in Afghanistan are due to environmental risks</span></div></div></div><div class="ig-cap">26% of all deaths in Afghanistan to environmental risks</div></div>
+    </div>
+    <div class="fig-grid">
+      <div class="ig"><div class="ig-head">Clean water</div><div class="ig-body"><div class="ig-nums"><div class="ig-num"><span class="ig-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6.5 7.2 6.5 11.5a6.5 6.5 0 0 1-13 0C5.5 10.2 12 3 12 3z"/></svg></span><b>10,000</b><span>deaths annually due to lack of clean water</span></div></div></div></div>
+      <div class="ig"><div class="ig-head">Air pollution</div><div class="ig-body"><p class="ig-sub">Deaths annually</p><div class="ig-bars"><div class="ig-bar"><div class="ig-bar-top"><span>Household air pollution</span><b>27,000</b></div><div class="ig-track"><i style="width:100.0%"></i></div></div><div class="ig-bar"><div class="ig-bar-top"><span>Ambient air pollution</span><b>11,000</b></div><div class="ig-track"><i style="width:40.7%"></i></div></div></div></div></div>
+    </div>
+  </main>
+</section>
+
+<!-- ===================== 7. DISASTER, INJURY, AND VIOLENCE (Arcadia) ===================== -->
+<section class="page" id="page-disaster-violence">
+  <div class="banner small"><span class="photo-hint">Banner photo here</span><span class="tag">Section 07</span><h1>Disaster, Injury, and Violence</h1></div>
+  <main>
+    <div class="two">
+      <div class="content">
+        <div class="title-icon"><img src="img/icon-disaster.png" alt=""><h2 class="section-title">Disaster, Injury, and Violence</h2></div>
+        <p>In UN interviews with more than 190 people affected by war in Afghanistan, 95% reported psychological harm or trauma-related symptoms, and 60% reported lasting physical effects that affected daily life. Floods can also make it harder to get nutritious food. One study linked flooding to lower intake of vitamin A, vitamin C, and iron (UN News, 2026; Oskorouchi, 2021).</p>
+      </div>
+      <div class="ig"><div class="ig-head">What people affected by war reported</div><div class="ig-body"><div class="ig-bars"><div class="ig-bar"><div class="ig-bar-top"><span>Psychological harm or trauma-related symptoms</span><b>95%</b></div><div class="ig-track"><i style="width:95%"></i></div></div><div class="ig-bar"><div class="ig-bar-top"><span>Lasting physical effects that affected daily life</span><b>60%</b></div><div class="ig-track"><i style="width:60%"></i></div></div></div></div><div class="ig-src">Source: UN News (2026) · Interviews with more than 190 people in Afghanistan</div></div>
+    </div>
+  </main>
+</section>
+
+<!-- ===================== 8. WHAT YOU CAN DO (Arcadia) ===================== -->
+<section class="page" id="page-take-action">
+  <div class="banner small"><span class="photo-hint">Banner photo here</span><span class="tag">Section 08</span><h1>What You Can Do to Help</h1></div>
+  <main>
+    <div class="two">
+      <div class="content">
+        <div class="title-icon"><img src="img/icon-help.png" alt=""><h2 class="section-title">How NGOs Can Help</h2></div>
+        <p>NGOs can partner with local organizations to distribute nutritious food and bring mobile clinics to rural communities. With more than 1 million children facing life-threatening acute malnutrition, these clinics can screen children and connect them to treatment (UNICEF, 2026). NGOs can also help farmers maintain irrigation systems so they can keep growing food during dry periods.</p>
+      </div>
+      <div class="ig"><div class="ig-head">What they can do to help</div><div class="ig-body"><p class="ig-sub">Actions for aid organizations and donors</p><div class="ig-factors three"><div class="ig-factor"><span class="ig-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10h18l-2 10H5zM8 10l3-6M16 10l-3-6M9 14v3M12 14v3M15 14v3"/></svg></span><b>Food assistance</b><span>Help families afford nutritious food.</span></div><div class="ig-factor"><span class="ig-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7h11v9H2zM13 10h4l4 3v3h-8z"/><circle cx="6" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/><path d="M7.5 9.5v4M5.5 11.5h4"/></svg></span><b>Mobile clinics</b><span>Bring malnutrition screening and treatment to rural communities.</span></div><div class="ig-factor"><span class="ig-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6.5 7.2 6.5 11.5a6.5 6.5 0 0 1-13 0C5.5 10.2 12 3 12 3z"/></svg></span><b>Irrigation support</b><span>Help farmers access water for crops during dry periods.</span></div></div></div></div>
+    </div>
+
+</main>
+</section>
+
+<!-- ===================== REFERENCES ===================== -->
+<section class="page" id="page-references">
+  <div class="banner small"><span class="tag">Sources</span><h1>References</h1></div>
+  <main>
+    <ol class="refs refs-page" style="max-width:960px;margin:0 auto;padding-left:26px">
+      <li>Akseer, N., Rizvi, A., Bhatti, Z., Das, J. K., Everett, K., Arur, A., Chopra, M., &amp; Bhutta, Z. A. (2019). Association of exposure to civil conflict with maternal resilience and maternal and child health and health system performance in Afghanistan. <i>JAMA Network Open, 2</i>(11), e1914819.  <a href="https://doi.org/10.1001/jamanetworkopen.2019.14819" target="_blank" rel="noopener">https://doi.org/10.1001/jamanetworkopen.2019.14819</a></li>
+      <li>Alemi, S., Nakamura, K., Seino, K., &amp; Hemat, S. (2022). Status of water, sanitation, and hygiene and standard precautions in healthcare facilities and its relevance to COVID-19 in Afghanistan. <i>Environmental Health and Preventive Medicine, 27</i>(0), 6–6.  <a href="https://doi.org/10.1265/ehpm.21-00272" target="_blank" rel="noopener">https://doi.org/10.1265/ehpm.21-00272</a></li>
+      <li>Aman, M. I., Co-author, Co-author, &amp; Co-author. (2013). <i>Maternal health care trends in Afghanistan</i>. DHS (Demographic and Health Surveys) Program.  <a href="https://www.govinfo.gov/content/pkg/GOVPUB-ID-PURL-gpo115197/pdf/GOVPUB" target="_blank" rel="noopener">https://www.govinfo.gov/content/pkg/GOVPUB-ID-PURL-gpo115197/pdf/GOVPUB</a></li>
+      <li>Amnesty International. (2026). <i>Afghanistan 2025</i>.  <a href="https://www.amnesty.org/en/location/asia-and-the-pacific/south-asia/afghanistan/report-afghanistan/" target="_blank" rel="noopener">https://www.amnesty.org/en/location/asia-and-the-pacific/south-asia/afghanistan/report-afghanistan/</a></li>
+      <li>Association of Religion Data Archives. (n.d.). <i>National profiles: Afghanistan</i>. Retrieved October 19, 2026, from  <a href="https://www.thearda.com/world-religion/national-profiles?u=1c" target="_blank" rel="noopener">https://www.thearda.com/world-religion/national-profiles?u=1c</a></li>
+      <li>Centers for Disease Control and Prevention. (n.d.). <i>Provisional maternal death rates</i>.  <a href="https://www.cdc.gov/nchs/nvss/vsrr/provisional-maternal-deaths-rates.htm" target="_blank" rel="noopener">https://www.cdc.gov/nchs/nvss/vsrr/provisional-maternal-deaths-rates.htm</a></li>
+      <li>Environmental health. (2016). World Health Organization - Regional Office for the Eastern Mediterranean.  <a href="https://www.emro.who.int/afg/programmes/enviromental-health.html" target="_blank" rel="noopener">https://www.emro.who.int/afg/programmes/enviromental-health.html</a></li>
+      <li>Hahad, O. (2024). Burden of disease due to air pollution in Afghanistan—Results from the global burden of disease study 2019. <i>International Journal of Environmental Research and Public Health, 21</i>(2), 197.  <a href="https://doi.org/10.3390/ijerph21020197" target="_blank" rel="noopener">https://doi.org/10.3390/ijerph21020197</a></li>
+      <li>Hamdam, P., Pant, S., &amp; Rahmani, F. A. (2025). Maternal health under the Taliban in Afghanistan: Current status and challenges. <i>BMC Pregnancy and Childbirth, 25</i>(1).  <a href="https://doi.org/10.1186/s12884-025-08458-3" target="_blank" rel="noopener">https://doi.org/10.1186/s12884-025-08458-3</a></li>
+      <li>Jewkes, R., Corboz, J., &amp; Gibbs, A. (2018). Trauma exposure and IPV experienced by Afghan women: Analysis of the baseline of a randomised controlled trial. <i>PLoS ONE, 13</i>(10).  <a href="https://doi.org/10.1371/journal.pone.0201974" target="_blank" rel="noopener">https://doi.org/10.1371/journal.pone.0201974</a></li>
+      <li>Minard, N. (2026, August 4). Afghanistan hunger crisis intensifies as millions left without food aid. <i>UN News</i>.  <a href="https://news.un.org/en/story/2026/08/1168069" target="_blank" rel="noopener">https://news.un.org/en/story/2026/08/1168069</a></li>
+      <li>Najam, W., Ibiyemi, T., Aziz, S., Najam, R., Gichohi-Wainaina, W. N., &amp; Oldewage-Theron, W. (2023). Social determinants of rural household food insecurity under the Taliban regime. <i>Nutrients, 15</i>(7), Article 1681.  <a href="https://doi.org/10.3390/nu15071681" target="_blank" rel="noopener">https://doi.org/10.3390/nu15071681</a></li>
+      <li>Oskorouchi, H. R., &amp; Sousa‐Poza, A. (2021). Floods, food security, and coping strategies: Evidence from Afghanistan. <i>Agricultural Economics, 52</i>(1), 123–140.  <a href="https://doi.org/10.1111/agec.12610" target="_blank" rel="noopener">https://doi.org/10.1111/agec.12610</a></li>
+      <li>Paiman, M. A., Parpio, Y. N., Akberali, N., Saeed, K. M. I., &amp; Khan, M. M. (2024). Factors associated with injuries and trauma among the survivors of gender-based violence in Afghanistan. <i>ResearchGate</i>, 57–67.  <a href="https://www.researchgate.net/publication/377271558_Factors_Associated_with_Injuries_and_Trauma_among_the_Survivors_of_Gender-Based_Violence_in_Afghanistan_Affiliation_1_WHO_EMRO" target="_blank" rel="noopener">https://www.researchgate.net/publication/377271558_Factors_Associated_with_Injuries_and_Trauma_among_the_Survivors_of_Gender-Based_Violence_in_Afghanistan_Affiliation_1_WHO_EMRO</a></li>
+      <li>PopulationPyramids. (n.d.). <i>Afghanistan population pyramid (2026)</i>.  <a href="https://www.populationpyramids.org/afghanistan" target="_blank" rel="noopener">https://www.populationpyramids.org/afghanistan</a></li>
+      <li>Sawe, B. E. (2019, September 10). The ethnic groups of Afghanistan. <i>WorldAtlas</i>.  <a href="https://www.worldatlas.com/articles/ethnic-groups-of-afghanistan.html" target="_blank" rel="noopener">https://www.worldatlas.com/articles/ethnic-groups-of-afghanistan.html</a></li>
+      <li>Spagnolello, O., Gatti, S., Shahir, M. A. A., Afzali, M. F., Portella, G., &amp; Baiardo Redaelli, M. (2022). Civilian war victims in Afghanistan: Five-year report from the Kabul Emergency Ngo Hospital. <i>European Journal of Trauma and Emergency Surgery, 49</i>(3), 1401–1405.  <a href="https://doi.org/10.1007/s00068-022-02137-0" target="_blank" rel="noopener">https://doi.org/10.1007/s00068-022-02137-0</a></li>
+      <li>Translators without Borders. (n.d.). <i>Language data for Afghanistan</i>.  <a href="https://translatorswithoutborders.org/language-data-for-afghanistan/" target="_blank" rel="noopener">https://translatorswithoutborders.org/language-data-for-afghanistan/</a></li>
+      <li>UN News. (2026, September). Decades of war have left ‘depth and breadth’ of trauma across Afghanistan, UN finds. <i>UN News</i>.  <a href="https://news.un.org/en/story/2026/09/1168238" target="_blank" rel="noopener">https://news.un.org/en/story/2026/09/1168238</a></li>
+      <li>UNICEF. (2024). <i>Afghanistan (AFG) - demographics, health &amp; infant mortality</i>. UNICEF Data.  <a href="https://data.unicef.org/country/afg/" target="_blank" rel="noopener">https://data.unicef.org/country/afg/</a></li>
+      <li>UNICEF. (2026). <i>Hospitals overwhelmed as child malnutrition surges across Afghanistan</i>.  <a href="https://www.unicef.org/press-releases/hospitals-overwhelmed-child-malnutrition-surges-across-afghanistan" target="_blank" rel="noopener">https://www.unicef.org/press-releases/hospitals-overwhelmed-child-malnutrition-surges-across-afghanistan</a></li>
+      <li>United Nations Afghanistan. (2026). <i>WHO and IsDB strengthen lifesaving care for women and children in Afghanistan</i>.  <a href="https://afghanistan.un.org/en/315122-who-and-isdb-strengthen-lifesaving-care-women-and-children-afghanistan" target="_blank" rel="noopener">https://afghanistan.un.org/en/315122-who-and-isdb-strengthen-lifesaving-care-women-and-children-afghanistan</a></li>
+      <li>United Nations Educational, Scientific and Cultural Organization, &amp; United Nations Children’s Fund. (2025). <i>Afghanistan education situation report 2025</i>.  <a href="https://articles.unesco.org/sites/default/files/medias/fichiers/2025/10/Afghanistan-eduction-situation-report-2025.pdf" target="_blank" rel="noopener">https://articles.unesco.org/sites/default/files/medias/fichiers/2025/10/Afghanistan-eduction-situation-report-2025.pdf</a></li>
+      <li>United Nations Population Fund. (2021, May). <i>UNFPA Afghanistan 4th country programme 2015–2021: Final evaluation report</i>.  <a href="https://www.unfpa.org/sites/default/files/2022-02/Afghanistan%20CPE.pdf" target="_blank" rel="noopener">https://www.unfpa.org/sites/default/files/2022-02/Afghanistan%20CPE.pdf</a></li>
+      <li>World Bank. (n.d.). <i>Afghanistan</i>. Retrieved October 19, 2026, from  <a href="https://data.worldbank.org/country/afghanistan" target="_blank" rel="noopener">https://data.worldbank.org/country/afghanistan</a></li>
+      <li>World Bank. (2026, May 26). <i>Afghanistan’s economy shows resilience, but living standards are falling</i> [Press release].  <a href="https://www.worldbank.org/en/news/press-release/2026/05/26/afghanistan-s-economy-shows-resilience-but-living-standards-are-falling" target="_blank" rel="noopener">https://www.worldbank.org/en/news/press-release/2026/05/26/afghanistan-s-economy-shows-resilience-but-living-standards-are-falling</a></li>
+      <li>World Bank Group, &amp; Asian Development Bank. (2020). <i>Climate risk country profile: Afghanistan</i>.  <a href="https://openknowledge.worldbank.org/server/api/core/bitstreams/28ece250-47dc-5181-b937-79980e208853/content" target="_blank" rel="noopener">https://openknowledge.worldbank.org/server/api/core/bitstreams/28ece250-47dc-5181-b937-79980e208853/content</a></li>
+      <li>World Food Programme. (2026). <i>Food insecurity and child malnutrition worsen in Afghanistan despite strong agricultural season</i>.  <a href="https://www.wfp.org/news/food-insecurity-and-child-malnutrition-worsen-afghanistan-despite-strong-agricultural-season" target="_blank" rel="noopener">https://www.wfp.org/news/food-insecurity-and-child-malnutrition-worsen-afghanistan-despite-strong-agricultural-season</a></li>
+      <li>World Health Organization. (2025a, September 21). <i>Afghanistan’s hidden epidemic of noncommunicable diseases and mental health conditions</i>.  <a href="https://www.emro.who.int/afg/afghanistan-news/afghanistans-hidden-epidemic-of-noncommunicable-diseases-and-mental-health-conditions.html" target="_blank" rel="noopener">https://www.emro.who.int/afg/afghanistan-news/afghanistans-hidden-epidemic-of-noncommunicable-diseases-and-mental-health-conditions.html</a></li>
+      <li>World Health Organization. (2025b). <i>Public health situation analysis: Afghanistan</i>.  <a href="https://www.who.int/publications/m/item/public-health-situation-analysis---afghanistan" target="_blank" rel="noopener">https://www.who.int/publications/m/item/public-health-situation-analysis---afghanistan</a></li>
+    </ol>
+  </main>
+</section>
+
+<!-- ===================== TEAM ===================== -->
+<section class="page" id="page-team">
+  <div class="banner small"><span class="tag">Sargent College · Boston University</span><h1>Meet the Team</h1></div>
+  <main>
+    <p class="lead">We are students in SAR HS325: Introduction to Global Health with Professor Bria Dunham. We created this site to raise awareness about food insecurity in Afghanistan.</p>
+    <div class="team">
+      <div class="member"><div class="avatar">AL</div><h3>Arcadia Li</h3><span>The Problem · Disaster, Injury &amp; Violence · How You Can Help</span><p>Add a short bio here.</p></div>
+      <div class="member"><div class="avatar">AM</div><h3>Amani Multani</h3><span>Afghanistan Beyond the Headlines</span><p>Add a short bio here.</p></div>
+      <div class="member"><div class="avatar">BH</div><h3>Brenda He</h3><span>NCDs · Maternal &amp; Child Health · Environmental Health</span><p>Add a short bio here.</p></div>
+      <div class="member"><div class="avatar">HZ</div><h3>He Zheng</h3><span>Infectious Disease</span><p>Add a short bio here.</p></div>
+    </div>
+  </main>
+</section>
+
+<footer>
+  <div class="foot-inner">
+    <span>© 2026 HS325 Deliverable · Food Insecurity in Afghanistan. All rights reserved.</span>
+    <span class="foot-links"><a class="foot-link" href="#references" data-link="references">References</a> <a class="foot-link" href="#team" data-link="team">Meet the Team →</a></span>
+  </div>
+</footer>
+
+<script>
+  // add hills decoration to every banner
+  const hills = document.getElementById('hills');
+  document.querySelectorAll('.banner').forEach(b => b.prepend(hills.content.cloneNode(true)));
+
+  // pictogram charts (100 people, N filled)
+  const person = (f) => `<svg viewBox="0 0 24 24"><circle cx="12" cy="7.5" r="4.2" fill="${f?'#111':'none'}" stroke="${f?'#111':'#b5b5b5'}" stroke-width="1.2"/><path d="M3.5 21c.6-4.6 4-7.3 8.5-7.3s7.9 2.7 8.5 7.3z" fill="${f?'#111':'none'}" stroke="${f?'#111':'#b5b5b5'}" stroke-width="1.2" stroke-linejoin="round"/></svg>`;
+  document.querySelectorAll('.pict').forEach(el => {
+    const n = +el.dataset.pct, total = +(el.dataset.total || 100);
+    el.innerHTML = Array.from({length:total}, (_, i) => person(i < n)).join('');
+  });
+
+  // hash router
+  const pages = ['home','problem','beyond-headlines','infectious-disease','ncds','maternal-child','environment','disaster-violence','take-action','references','team'];
+  const dd = document.getElementById('dd');
+  function show(){
+    let id = location.hash.slice(1);
+    if(!pages.includes(id)) id = 'home';
+    document.querySelectorAll('.page').forEach(p => p.classList.toggle('show', p.id === 'page-' + id));
+    document.querySelectorAll('[data-link]').forEach(a => a.classList.toggle('active', a.dataset.link === id));
+    dd.classList.toggle('active', !['home'].includes(id));
+    dd.classList.remove('open');
+    window.scrollTo(0,0);
+  }
+  window.addEventListener('hashchange', show);
+  show();
+
+  // dropdown: hover on desktop, tap on mobile
+  const btn = dd.querySelector('button');
+  btn.addEventListener('click', e => {
+    e.stopPropagation();
+    dd.classList.toggle('open');
+    btn.setAttribute('aria-expanded', dd.classList.contains('open'));
+  });
+  document.addEventListener('click', () => dd.classList.remove('open'));
+</script>
+</body>
+</html>
