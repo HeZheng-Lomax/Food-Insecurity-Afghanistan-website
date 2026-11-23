@@ -218,6 +218,15 @@
   .ig-pict-txt b{display:block;font-size:40px;color:#111}
   .ig-pict-txt span{display:block;font-size:14px;color:#555;line-height:1.4}
   .refs-page li{margin-bottom:14px;padding-left:6px;font-size:17px}
+  .res{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .res-col{background:#fff;border-radius:var(--r);box-shadow:0 4px 18px rgba(0,0,0,.07);overflow:hidden}
+  .res-col h3{background:#111;color:#fff;font-size:17px;padding:14px 20px}
+  .res-col ul{list-style:none;padding:8px 20px 16px}
+  .res-col li{padding:10px 0;border-bottom:1px solid #eee;font-family:Arial,sans-serif;font-size:15px;line-height:1.35}
+  .res-col li:last-child{border-bottom:none}
+  .res-col a{font-weight:700;color:#111}
+  .res-col .url{font-size:12px;color:#888;word-break:break-all}
+  @media (max-width:820px){.res{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -234,9 +243,9 @@
         <a href="#infectious-disease" data-link="infectious-disease"><i>03</i>Infectious Disease</a>
         <a href="#ncds" data-link="ncds"><i>04</i>Non-communicable Diseases</a>
         <a href="#maternal-child" data-link="maternal-child"><i>05</i>Maternal and Child Health</a>
-        <a href="#environment" data-link="environment"><i>06</i>Environmental Health</a>
-        <a href="#disaster-violence" data-link="disaster-violence"><i>07</i>Disaster, Injury, and Violence</a>
-        <a href="#take-action" data-link="take-action"><i>08</i>What You Can Do to Help</a>
+        <a href="#environment" data-link="environment"><i>06</i>Droughts, Disaster, Danger!</a>
+        <a href="#disaster-violence" data-link="disaster-violence"><i>07</i>The Human Cost of Crisis</a>
+        <a href="#take-action" data-link="take-action"><i>08</i>Turning Awareness Into Action</a>
         <div class="menu-sep"></div>
         <a href="#references" data-link="references">References</a>
         <a href="#team" data-link="team">Meet the Team</a>
@@ -267,16 +276,16 @@
       <a class="ov" href="#infectious-disease"><span>03</span><h3>Infectious Disease</h3></a>
       <a class="ov" href="#ncds"><span>04</span><h3>Non-communicable Diseases</h3></a>
       <a class="ov" href="#maternal-child"><span>05</span><h3>Maternal and Child Health</h3></a>
-      <a class="ov" href="#environment"><span>06</span><h3>Environmental Health</h3></a>
-      <a class="ov" href="#disaster-violence"><span>07</span><h3>Disaster, Injury, and Violence</h3></a>
-      <a class="ov" href="#take-action"><span>08</span><h3>What You Can Do to Help</h3></a>
+      <a class="ov" href="#environment"><span>06</span><h3>Droughts, Disaster, Danger!</h3><p>Environmental health</p></a>
+      <a class="ov" href="#disaster-violence"><span>07</span><h3>The Human Cost of Crisis</h3><p>Disaster, injury, and violence</p></a>
+      <a class="ov" href="#take-action"><span>08</span><h3>Turning Awareness Into Action</h3><p>What you can do to help</p></a>
     </div>
   </main>
 </section>
 
 <!-- ===================== 1. PROBLEM (Arcadia) ===================== -->
 <section class="page" id="page-problem">
-  <div class="banner small"><span class="photo-hint">Banner photo here</span><span class="tag">Section 01 · Problem</span><h1>Food Insecurity in Afghanistan</h1></div>
+  <div class="banner small has-photo" style="background-image:url('img/banner-problem.jpg')"><span class="tag">Section 01 · Problem</span><h1>Food Insecurity in Afghanistan</h1></div>
   <main>
     <div class="intro">
       <div>
@@ -347,7 +356,7 @@
 
 <!-- ===================== 3. INFECTIOUS DISEASE (Lomax) ===================== -->
 <section class="page" id="page-infectious-disease">
-  <div class="banner small"><span class="photo-hint">Banner photo here</span><span class="tag">Section 03</span><h1>Infectious Disease</h1></div>
+  <div class="banner small has-photo" style="background-image:url('img/banner-infectious.jpg'), linear-gradient(115deg,#0d0d0d,#3a3a3a)"><span class="tag">Section 03</span><h1>Infectious Disease</h1></div>
   <main>
     <div class="two">
       <div class="content">
@@ -367,9 +376,12 @@
 
 <!-- ===================== 4. NON-COMMUNICABLE DISEASES (Brenda) ===================== -->
 <section class="page" id="page-ncds">
-  <div class="banner small"><span class="photo-hint">Banner photo here</span><span class="tag">Section 04</span><h1>Non-communicable Diseases</h1></div>
+  <div class="banner small has-photo" style="background-image:url('img/banner-ncd.jpg')"><span class="tag">Section 04</span><h1>Non-communicable Diseases</h1></div>
   <main>
-    <p class="lead">Many non-communicable diseases can root from poor food quality, or lack of access to food. In a study, 42.8% of the participants were overweight or obese, 82.6% of the participants had inadequate intake of vegetables and fruits, etc. Subsequently, 18% of the participants had elevated cholesterol, 25% had high blood pressure, etc. Among these are pre-sets to other communicable and non-communicable diseases.</p>
+    <div class="content" style="max-width:860px;margin:0 auto 40px">
+      <p>Poor food quality and lack of access to proper nutrition is a major risk factor for a number of non-communicable diseases. In a study from the Journal of Health that asked over 3,500 adults from all 34 provinces in Afghanistan, they found that 42.8% of the participants were overweight or obese and 82.6% of the participants had inadequate intake of vegetables and fruit. Additionally, 18% of the participants had elevated cholesterol and 25% had high blood pressure. The authors discuss food insecurity, socioeconomic status, and financial insecurity as potential contributors to these issues. Concerningly, these are issues that span all across the country. Also, issues like hypertension, obesity, and high cholesterol are pre-sets for many cardiovascular diseases. Beyond mortality, these conditions create ongoing needs for long term treatment that the country’s fragile health system struggles to meet.</p>
+      <p>Long term conflict, displacement, and natural disasters have led to mental health challenges like anxiety, depression and PTSD, yet mental health services in provincial hospitals and primary care facilities are insufficient.</p>
+    </div>
     <div class="fig-grid three">
       <div class="ig"><div class="ig-head">Non-communicable diseases</div><div class="ig-body"><div class="ig-pict-wrap"><div class="pict" data-pct="43" data-total="100"></div><div class="ig-pict-txt"><b>43%</b><span>of deaths nationwide are from heart disease, diabetes, cancer, and chronic lung diseases</span></div></div></div><div class="ig-cap">Heart disease, diabetes, cancer, and chronic lung diseases account for approximately 43% of deaths nationwide in Afghanistan.</div></div>
       <div class="ig"><div class="ig-head">Cardiovascular disease</div><div class="ig-body"><div class="ig-nums"><div class="ig-num"><span class="ig-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5s-8-5-8-11a4.5 4.5 0 0 1 8-2.8 4.5 4.5 0 0 1 8 2.8c0 6-8 11-8 11z"/><path d="M5 12h4l1.5-3 2 6 1.5-3H19"/></svg></span><b>40,000</b><span>deaths annually from cardiovascular disease</span></div></div></div><div class="ig-cap">Cardiovascular disease alone causes more than 40,000 deaths annually.</div></div>
@@ -380,9 +392,11 @@
 
 <!-- ===================== 5. MATERNAL AND CHILD HEALTH (Brenda) ===================== -->
 <section class="page" id="page-maternal-child">
-  <div class="banner small"><span class="photo-hint">Banner photo here</span><span class="tag">Section 05</span><h1>Maternal and Child Health</h1></div>
+  <div class="banner small has-photo" style="background-image:url('img/banner-mch.jpg')"><span class="tag">Section 05</span><h1>Maternal and Child Health</h1></div>
   <main>
-    <p class="lead">Child malnutrition is a major issue in Afghanistan, with an estimated 3.7 million children suffering from wasting and over 1 million suffering from acute, life-threatening malnutrition</p>
+    <div class="content" style="max-width:860px;margin:0 auto 40px">
+      <p>In 2023, the UN Population Fund estimated Afghanistan’s maternal mortality ratio to be 521 deaths per 100,000 live births. Additionally, antenatal care, skilled birth attendance, and postnatal care are all insufficient in this country. Financial challenges, inadequate access to nutritious foods, and long-term conflict make proper nutrition particularly difficult for pregnant and breastfeeding women. These issues directly play a part in pregnancy outcomes and compromises infant development. Unfortunately, child malnutrition is a major issue in Afghanistan, with an estimated 3.7 million children suffering from food wasting and over 1 million suffering from acute, life-threatening malnutrition. The Child Food Poverty Report for Afghanistan in 2025 revealed that 90% of kids under 2 years old are in food poverty, and 50% suffer from severe food poverty. Together, these are major challenges for the country’s population and health system.</p>
+    </div>
     <div class="fig-grid">
       <div class="ig"><div class="ig-head">Child malnutrition</div><div class="ig-body"><div class="ig-nums"><div class="ig-num"><span class="ig-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11h18a9 9 0 0 1-18 0zM8 7c0-1.5 1.5-1.5 1.5-3M13 7c0-1.5 1.5-1.5 1.5-3"/></svg></span><b>3.7 million</b><span>children affected by wasting</span></div><div class="ig-num"><span class="ig-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M12 8v8M8 12h8"/></svg></span><b>Over 1 million</b><span>children facing life-threatening acute malnutrition</span></div></div></div><div class="ig-src">Source: UNICEF (2026)</div></div>
       <div class="ig"><div class="ig-head">Maternal mortality</div><div class="ig-body"><p class="ig-sub">Deaths per 100,000 live births</p><div class="ig-bars"><div class="ig-bar"><div class="ig-bar-top"><span>Afghanistan</span><b>521</b></div><div class="ig-track"><i style="width:100.0%"></i></div></div><div class="ig-bar"><div class="ig-bar-top"><span>United States</span><b>18</b></div><div class="ig-track"><i style="width:3.5%"></i></div></div></div></div><div class="ig-cap"><a href="https://www.cdc.gov/nchs/nvss/vsrr/provisional-maternal-deaths-rates.htm" target="_blank" rel="noopener">https://www.cdc.gov/nchs/nvss/vsrr/provisional-maternal-deaths-rates.htm</a></div></div>
@@ -392,7 +406,7 @@
 
 <!-- ===================== 6. ENVIRONMENTAL HEALTH (Brenda) ===================== -->
 <section class="page" id="page-environment">
-  <div class="banner small"><span class="photo-hint">Banner photo here</span><span class="tag">Section 06</span><h1>Environmental Health</h1></div>
+  <div class="banner small has-photo" style="background-image:url('img/banner-env.jpg')"><span class="tag">Section 06 · Environmental Health</span><h1>Droughts, Disaster, Danger!</h1></div>
   <main>
     <div class="two">
       <div class="content">
@@ -409,7 +423,7 @@
 
 <!-- ===================== 7. DISASTER, INJURY, AND VIOLENCE (Arcadia) ===================== -->
 <section class="page" id="page-disaster-violence">
-  <div class="banner small"><span class="photo-hint">Banner photo here</span><span class="tag">Section 07</span><h1>Disaster, Injury, and Violence</h1></div>
+  <div class="banner small has-photo" style="background-image:url('img/banner-div.jpg')"><span class="tag">Section 07 · Disaster, Injury, and Violence</span><h1>The Human Cost of Crisis</h1></div>
   <main>
     <div class="two">
       <div class="content">
@@ -423,7 +437,7 @@
 
 <!-- ===================== 8. WHAT YOU CAN DO (Arcadia) ===================== -->
 <section class="page" id="page-take-action">
-  <div class="banner small"><span class="photo-hint">Banner photo here</span><span class="tag">Section 08</span><h1>What You Can Do to Help</h1></div>
+  <div class="banner small has-photo" style="background-image:url('img/banner-help.jpg')"><span class="tag">Section 08 · What You Can Do to Help</span><h1>Turning Awareness Into Action</h1></div>
   <main>
     <div class="two">
       <div class="content">
@@ -433,6 +447,9 @@
       <div class="ig"><div class="ig-head">What they can do to help</div><div class="ig-body"><p class="ig-sub">Actions for aid organizations and donors</p><div class="ig-factors three"><div class="ig-factor"><span class="ig-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10h18l-2 10H5zM8 10l3-6M16 10l-3-6M9 14v3M12 14v3M15 14v3"/></svg></span><b>Food assistance</b><span>Help families afford nutritious food.</span></div><div class="ig-factor"><span class="ig-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7h11v9H2zM13 10h4l4 3v3h-8z"/><circle cx="6" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/><path d="M7.5 9.5v4M5.5 11.5h4"/></svg></span><b>Mobile clinics</b><span>Bring malnutrition screening and treatment to rural communities.</span></div><div class="ig-factor"><span class="ig-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6.5 7.2 6.5 11.5a6.5 6.5 0 0 1-13 0C5.5 10.2 12 3 12 3z"/></svg></span><b>Irrigation support</b><span>Help farmers access water for crops during dry periods.</span></div></div></div></div>
     </div>
 
+
+    <h2 class="section-title" style="text-align:center;margin-top:10px">Resources</h2>
+    <div class="res"><div class="res-col"><h3>Donate</h3><ul><li><a href="https://crisisrelief.un.org/en/donate-afghanistan-crisis" target="_blank" rel="noopener">crisisrelief.un.org</a><br><span class="url">https://crisisrelief.un.org/en/donate-afghanistan-crisis</span></li><li><a href="https://sharethemeal.org/en-us/campaigns/afghanistan6" target="_blank" rel="noopener">sharethemeal.org</a><br><span class="url">https://sharethemeal.org/en-us/campaigns/afghanistan6</span></li><li><a href="https://www.globalgiving.org/afghanistan-relief/" target="_blank" rel="noopener">globalgiving.org</a><br><span class="url">https://www.globalgiving.org/afghanistan-relief/</span></li><li><a href="https://www.khaledhosseinifoundation.org/post/help-us-feed-hungry-children-in-afghanistan-2" target="_blank" rel="noopener">khaledhosseinifoundation.org</a><br><span class="url">https://www.khaledhosseinifoundation.org/post/help-us-feed-hungry-children-in-afghanistan-2</span></li></ul></div><div class="res-col"><h3>Get Involved</h3><ul><li><a href="https://www.interaction.org/working-groups/" target="_blank" rel="noopener">interaction.org</a><br><span class="url">https://www.interaction.org/working-groups/</span></li><li><a href="https://www.globalgiving.org/afghanistan-relief/" target="_blank" rel="noopener">globalgiving.org</a><br><span class="url">https://www.globalgiving.org/afghanistan-relief/</span></li><li><a href="https://www.unocha.org/afghanistan-humanitarian-fund" target="_blank" rel="noopener">unocha.org</a><br><span class="url">https://www.unocha.org/afghanistan-humanitarian-fund</span></li><li><a href="https://www.wfp.org/emergencies/afghanistan" target="_blank" rel="noopener">wfp.org</a><br><span class="url">https://www.wfp.org/emergencies/afghanistan</span></li><li><a href="https://www.afghanaid.org.uk/Listing/Category/fundraising" target="_blank" rel="noopener">afghanaid.org.uk</a><br><span class="url">https://www.afghanaid.org.uk/Listing/Category/fundraising</span></li></ul></div><div class="res-col"><h3>Other NGO’s and What They’re Doing</h3><ul><li><a href="https://www.unhcr.org/af/about-unhcr/partners" target="_blank" rel="noopener">unhcr.org</a><br><span class="url">https://www.unhcr.org/af/about-unhcr/partners</span></li></ul></div></div>
 </main>
 </section>
 
@@ -481,10 +498,10 @@
   <main>
     <p class="lead">We are students in SAR HS325: Introduction to Global Health with Professor Bria Dunham. We created this site to raise awareness about food insecurity in Afghanistan.</p>
     <div class="team">
-      <div class="member"><div class="avatar">AL</div><h3>Arcadia Li</h3><span>The Problem · Disaster, Injury &amp; Violence · How You Can Help</span><p>Add a short bio here.</p></div>
-      <div class="member"><div class="avatar">AM</div><h3>Amani Multani</h3><span>Afghanistan Beyond the Headlines</span><p>Add a short bio here.</p></div>
-      <div class="member"><div class="avatar">BH</div><h3>Brenda He</h3><span>NCDs · Maternal &amp; Child Health · Environmental Health</span><p>Add a short bio here.</p></div>
-      <div class="member"><div class="avatar">HZ</div><h3>He Zheng</h3><span>Infectious Disease</span><p>Add a short bio here.</p></div>
+      <div class="member"><div class="avatar">HZ</div><h3>He Zheng</h3></div>
+      <div class="member"><div class="avatar">AL</div><h3>Arcadia Li</h3></div>
+      <div class="member"><div class="avatar">AM</div><h3>Amani Multani</h3></div>
+      <div class="member"><div class="avatar">BH</div><h3>Brenda He</h3></div>
     </div>
   </main>
 </section>
